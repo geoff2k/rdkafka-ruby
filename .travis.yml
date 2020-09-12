@@ -5,6 +5,12 @@ sudo: false
 services:
   - docker
 
+addons:
+  apt:
+    packages:
+      - gdb
+      - apport
+
 env:
   global:
     - CC_TEST_REPORTER_ID=9f7f740ac1b6e264e1189fa07a6687a87bcdb9f3c0f4199d4344ab3b538e187e
@@ -20,6 +26,13 @@ rvm:
   - jruby-9.2.11.1
 
 before_install:
+  - ulimit -c
+  - ulimit -a -S
+  - ulimit -a -H
+  - cat /proc/sys/kernel/core_pattern
+  - cat /etc/default/apport
+  - service --status-all || true
+  - initctl list || true
   - gem update --system
   - |
     r_eng="$(ruby -e 'STDOUT.write RUBY_ENGINE')";
@@ -41,7 +54,10 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - bundle exec rspec --format documentation
+  - ulimit -c unlimited -S
+  - bundle exec rspec --format documentation || RESULT=$?
+  - find ./ -maxdepth 1 -name 'core*' -print
+  - echo RESULT=$RESULT
 
 after_script:
   - docker-compose stop
