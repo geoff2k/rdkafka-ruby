@@ -33,8 +33,8 @@ task :default => :clean do
     :url => "https://codeload.github.com/edenhill/librdkafka/tar.gz/v#{Rdkafka::LIBRDKAFKA_VERSION}",
     :sha256 => Rdkafka::LIBRDKAFKA_SOURCE_SHA256
   }
-  cflags = "-O1 -pipe -ggdb -Wall -g --enable-devel --enable-refcnt-debug"
-  recipe.configure_options = ["--host=#{recipe.host}", "CFLAGS=#{cflags}", "CXXFLAGS=#{cflags}"]
+  cflags = "-O1 -pipe -ggdb -Wall -g"
+  recipe.configure_options = ["--host=#{recipe.host}", "CFLAGS=#{cflags}", "CXXFLAGS=#{cflags}", "--enable-devel", "--enable-refcnt-debug"]
   recipe.cook
   # Move dynamic library we're interested in
   if recipe.host.include?('darwin')
