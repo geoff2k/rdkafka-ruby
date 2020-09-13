@@ -34,9 +34,10 @@ task :default => :clean do
     :sha256 => Rdkafka::LIBRDKAFKA_SOURCE_SHA256
   }
   cflags = "  -O1 -pipe -ggdb -Wall -g"
-  ENV["CFLAGS"] = ENV["CFLAGS"] + cflags
-  ENV["CPPFLAGS"] = ENV["CPPFLAGS"] + cflags
-  ENV["CXXFLAGS"] = ENV["CXXFLAGS"] + cflags
+  ENV["CFLAGS"]   = ENV["CFLAGS"].nil?   ? cflags : ENV["CFLAGS"]   + cflags
+  ENV["CPPFLAGS"] = ENV["CPPFLAGS"].nil? ? cflags : ENV["CPPFLAGS"] + cflags
+  ENV["CXXFLAGS"] = ENV["CXXFLAGS"].nil? ? cflags : ENV["CXXFLAGS"] + cflags
+
   recipe.configure_options = ["--host=#{recipe.host}", "--enable-devel", "--enable-refcnt-debug"]
   recipe.cook
   # Move dynamic library we're interested in
