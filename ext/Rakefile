@@ -38,7 +38,8 @@ task :default => :clean do
   ENV["CPPFLAGS"] = ENV["CPPFLAGS"].nil? ? cflags : ENV["CPPFLAGS"] + cflags
   ENV["CXXFLAGS"] = ENV["CXXFLAGS"].nil? ? cflags : ENV["CXXFLAGS"] + cflags
 
-  recipe.configure_options = ["--host=#{recipe.host}", "--enable-devel", "--enable-refcnt-debug"]
+  # recipe.configure_options = ["--host=#{recipe.host}", "--enable-devel", "--enable-refcnt-debug"] # terminated due to too much logging
+  recipe.configure_options = ["--host=#{recipe.host}", "--enable-devel"]
   recipe.cook
   # Move dynamic library we're interested in
   if recipe.host.include?('darwin')
