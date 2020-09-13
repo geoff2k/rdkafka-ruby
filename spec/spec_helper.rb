@@ -8,6 +8,14 @@ end
 require "pry"
 require "rspec"
 require "rdkafka"
+require "pp"
+
+RSpec.configure do |config|
+  config.after(:suite) do
+    pp GC.stat
+  end
+end
+
 
 `docker-compose exec kafka kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --if-not-exists --topic consume_test_topic`
 `docker-compose exec kafka kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --if-not-exists --topic empty_test_topic`
