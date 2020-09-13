@@ -57,7 +57,7 @@ before_script:
 
 script:
   - ulimit -c unlimited -S
-  - bundle exec rspec --format documentation || RESULT=$?
+  - RUBYOPT=--debug bundle exec rspec --format documentation || RESULT=$?
   - if [[ ${RESULT} != 139 ]]; then echo "Skippping special segfault processing because result was ${RESULT}" && exit $RESULT; fi;
   - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do bundle exec gdb -q ruby core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
   - exit 139
